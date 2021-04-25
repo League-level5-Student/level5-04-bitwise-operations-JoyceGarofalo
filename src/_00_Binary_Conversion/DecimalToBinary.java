@@ -64,7 +64,7 @@ public class DecimalToBinary {
     
         do {
             // 1. Logical right shift by 1
-            int quotient = decimalNum >>> 1;
+            int quotient = decimalNum >>> 1; //if number is negative fills in with 1
         
             // 2. Check remainder and add '1' or '0'
             if( decimalNum % 2 != 0 ){

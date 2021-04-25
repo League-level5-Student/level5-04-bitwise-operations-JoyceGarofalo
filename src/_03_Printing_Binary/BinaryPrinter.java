@@ -9,21 +9,26 @@ public class BinaryPrinter {
 
 	
 	public void printByteBinary(byte b) {
-		// We first want to print the bit in the one's place
-		
-		// Shift b seven bits to the right
-		
-		// Use the & operator to "mask" the bit in the one's place
-		// This can be done by "anding" (&) it with the value of 1
-		
-		// Print the result using System.out.print (NOT System.out.println)
-		
-		//Use this method to print the remaining 7 bits of b
+		for(int i = 1; i < 8; i++) {
+			// We first want to print the bit in the one's place
+			int onesPlace = b % 10;
+			System.out.println(onesPlace);
+			// Shift b seven bits to the right
+			int numShifted = b >> 7;
+			
+			// Use the & operator to "mask" the bit in the one's place
+			// This can be done by "anding" (&) it with the value of 1
+			int num = onesPlace & 1;
+			// Print the result using System.out.print (NOT System.out.println)
+			System.out.print(num);
+			//Use this method to print the remaining 7 bits of b
+		}
 	}
 	
 	public void printShortBinary(short s) {
 		// Create 2 byte variables
-		
+		byte b1;
+		byte b2;
 		// Use bit shifting and masking (&) to save the first
 		// 8 bits of s in one byte, and the second 8 bits of
 		// s in the other byte
