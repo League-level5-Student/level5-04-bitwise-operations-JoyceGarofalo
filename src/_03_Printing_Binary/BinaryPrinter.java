@@ -6,46 +6,52 @@ public class BinaryPrinter {
 	 * Do not use the Integer.toBinaryString method!
 	 * Use the main method to test your methods.
 	 */
-
 	
 	public void printByteBinary(byte b) {
-		for(int i = 1; i < 8; i++) {
-			// We first want to print the bit in the one's place
-			int onesPlace = b % 10;
-			System.out.println(onesPlace);
+		// We first want to print the bit in the one's place
+		for(int i = 6; i > -1; i--) {
 			// Shift b seven bits to the right
-			int numShifted = b >> 7;
+			int numShifted = b >> i;
+			//System.out.println(numShifted);
+			int numOnes = numShifted%10;
 			
 			// Use the & operator to "mask" the bit in the one's place
 			// This can be done by "anding" (&) it with the value of 1
-			int num = onesPlace & 1;
+			numOnes = numOnes & 1;
+			
 			// Print the result using System.out.print (NOT System.out.println)
-			System.out.print(num);
-			//Use this method to print the remaining 7 bits of b
+			System.out.print(numOnes);
 		}
+		//Use this method to print the remaining 7 bits of b
+		System.out.println();
 	}
 	
 	public void printShortBinary(short s) {
 		// Create 2 byte variables
-		byte b1;
-		byte b2;
+		byte b1 = 0;
+		byte b2 = 0;
 		// Use bit shifting and masking (&) to save the first
 		// 8 bits of s in one byte, and the second 8 bits of
 		// s in the other byte
-		for(int i = 1; i < 8; i++) {
-			int firstBit = s % 10;
-			int shiftBit = s >> 7;
-			int num = firstBit & 1;
+		for(int i = 15; i > 7; i--) {
+			int numShifted = s >> i;
+			int numOnes = numShifted%10;
+			b2 = (byte) (numOnes & 1);
+			//System.out.print(b2);
 		}
-		for(int i = 8; i < 16; i++) {
-			int firstBit = s % 10;
-			int shiftBit = s >> 7;
-			int num = firstBit & 1;
+
+		for(int i = 7; i > -1; i--) {
+			int numShifted = s >> i;
+			int numOnes = numShifted%10;
+			b1 = (byte) (numOnes & 1);
+			//System.out.print(b1);
 		}
+		
 		// Call printByteBinary twice using the two bytes
 		// Make sure they are in the correct order
-		//b1.printByteBinary();
-		//b2.printByteBinary();
+		printByteBinary(b2);
+		printByteBinary(b1);
+		
 	}
 	
 	public void printIntBinary(int i) {
@@ -58,8 +64,7 @@ public class BinaryPrinter {
 		
 		// Call printShortBinary twice using the two short variables
 		// Make sure they are in the correct order
-		//a.printShortBinary();
-		//b.printShortBinary();
+		
 	}
 	
 	public void printLongBinary(long l) {
@@ -68,5 +73,12 @@ public class BinaryPrinter {
 	
 	public static void main(String[] args) {
 		// Test your methods here
+		BinaryPrinter bp = new BinaryPrinter();
+		
+		byte b = 82; // 1010010
+		bp.printByteBinary(b);
+		
+		short s = 1254; //0000010011100110
+		bp.printShortBinary(s);
 	}
 }

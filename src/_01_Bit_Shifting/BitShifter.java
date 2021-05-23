@@ -21,7 +21,7 @@ public class BitShifter {
 		String binaryStr = "";
 	    
         do {
-            int quotient = numShifted >> 1; //diving by 2 shifts binary value down 1 to the right
+            int quotient = numShifted >> 1; //dividing by 2 shifts binary value down 1 to the right
 
             if( numShifted % 2 != 0 ){
                 binaryStr = '1' + binaryStr;
