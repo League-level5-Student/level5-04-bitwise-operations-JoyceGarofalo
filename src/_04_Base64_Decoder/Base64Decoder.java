@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 public class Base64Decoder {
 	/*
 	 * Base 64 is a way of encoding binary data using text.
@@ -64,7 +66,7 @@ public class Base64Decoder {
 		ArrayList<Integer> third6 = new ArrayList<Integer>();
 		ArrayList<Integer> fourth6 = new ArrayList<Integer>();
 
-		
+		//converts first letter to corresponding number value and then into binary
 		int result = convertBase64Char(c0);
 		for(int i = 5; i > -1; i--) {
 			int numShifted = result >> i;
@@ -77,6 +79,7 @@ public class Base64Decoder {
 		//System.out.print(first6);
 		//System.out.print("hi");
 		
+		//converts second letter to corresponding number value and then into binary
 		int result_1 = convertBase64Char(c1);
 		for(int i = 5; i > -1; i--) {
 			int numShifted = result_1 >> i;
@@ -86,6 +89,7 @@ public class Base64Decoder {
 			second6.add(numOnes);
 		}
 		
+		//converts third letter to corresponding number value and then into binary
 		int result_2 = convertBase64Char(c2);
 		for(int i = 5; i > -1; i--) {
 			int numShifted = result_2 >> i;
@@ -95,8 +99,9 @@ public class Base64Decoder {
 			third6.add(numOnes);
 		}
 		
+		//converts fourth letter to corresponding number value and then into binary
 		int result_3 = convertBase64Char(c3);
-		for(int i = 6; i > -1; i--) {
+		for(int i = 5; i > -1; i--) {
 			int numShifted = result_3 >> i;
 			int numOnes = numShifted%10;
 			numOnes = numOnes & 1;
@@ -104,6 +109,7 @@ public class Base64Decoder {
 			fourth6.add(numOnes);
 		}
 		
+		//separates four binary values into three binary values
 		ArrayList<Integer> totalArray = new ArrayList<Integer>();
 		totalArray.addAll(first6);
 		totalArray.addAll(second6);
@@ -123,19 +129,107 @@ public class Base64Decoder {
 			third8[i] = totalArray.get(i+16);
 		}
 		
-		//SO FAR: first8, second8, third8 have values in binary. Need to change these back into decimal
-		//put decimal values into array of 3 values and return array
+		//first digit binary to decimal
+		int[] first8numerical = new int[8];
+		int firstnumber = 1;
+		byte first8sum = 0;
+		for(int i = 7; i > -1; i--) {
+			//from the rightmost value to the leftmost:
+			// assign the bit to a value of 1
+			first8numerical[i] = firstnumber;
+			// as you move left assign the next bit to double the previous value
+			firstnumber = 2*firstnumber;
+			// for every bit value of 1, add all those values
+			if(first8[i] == 1) {
+				first8sum = (byte) (first8sum + first8numerical[i]);
+			}
+		}
 		
-		//Collect all values into one array. Split into groups of eight.
-		//Each group turn it back into a number. Return array of those numbers
+		//second digit binary to decimal
+		int[] second8numerical = new int[8];
+		int secondnumber = 1;
+		byte second8sum = 0;
+		for(int i = 7; i > -1; i--) {
+			//from the rightmost value to the leftmost:
+			// assign the bit to a value of 1
+			second8numerical[i] = secondnumber;
+			// as you move left assign the next bit to double the previous value
+			secondnumber = 2*secondnumber;
+			// for every bit value of 1, add all those values
+			if(second8[i] == 1) {
+				second8sum = (byte) (second8sum + second8numerical[i]);
+			}
+		}
 		
-		return null;
-	}	//doesn't work
+		//third digit binary to decimal
+		int[] third8numerical = new int[8];
+		int thirdnumber = 1;
+		byte third8sum = 0;
+		for(int i = 7; i > -1; i--) {
+			//from the rightmost value to the leftmost:
+			// assign the bit to a value of 1
+			third8numerical[i] = thirdnumber;
+			// as you move left assign the next bit to double the previous value
+			thirdnumber = 2*thirdnumber;
+			// for every bit value of 1, add all those values
+			if(third8[i] == 1) {
+				third8sum = (byte) (third8sum + third8numerical[i]);
+			}
+		}
+		
+		//puts three decimal values into an array
+		byte[] charsToBits = {first8sum, second8sum, third8sum};
+		for(int i = 0; i< 3; i++) {
+			System.out.println(charsToBits[i]);
+		}
+		
+		return charsToBits;
+	}	
 	
 	
 	//3. Complete this method so that it takes in a string of any length
 	//   and returns the full byte array of the decoded base64 characters.
+	
+	//1 byte = 8 bits
 	public static byte[] base64StringToByteArray(String file) {
+		String message = JOptionPane.showInputDialog("enter a string");
+		
+		ArrayList<Integer> totalBinaryValues = new ArrayList<Integer>();
+		
+		//makes list divisible by 8
+		int numberOfBits = message.length()*6;
+		int numberOfExtraZeros = numberOfBits % 8;
+		for(int i = 0; i < numberOfExtraZeros; i++) {
+			totalBinaryValues.add(0);
+		}
+			
+		//converts letters to binary and puts all binary values into a list
+		for(int i = 0; i < message.length(); i++) {
+			//convert each char to a decimal
+			int charsToNum = convertBase64Char(message.charAt(i));
+			//convert each decimal value to binary
+			for(int x = 5; x > -1; x--) {
+				int numShifted = charsToNum >> x;
+				int numOnes = numShifted%10;
+				numOnes = numOnes & 1;
+				//add all binary values to one array list
+				totalBinaryValues.add(numOnes);
+			}	
+		}
+		
+		int numberOfGroupsOf8 = totalBinaryValues.size() / 8;	//not sure if I need this line
+		
+		//converts array list into an array
+		int[] BinaryValues = new int[totalBinaryValues.size()];
+		for(int i = 0; i < totalBinaryValues.size(); i++) {
+			BinaryValues[i] = totalBinaryValues.get(i);
+		}
+		
+		//STILL WORKING HERE
+		
+		//next steps: take array and work in groups of 8 to turn binary back into letters. Put letters in a byte array
+		
+		
 		
 		
 		
