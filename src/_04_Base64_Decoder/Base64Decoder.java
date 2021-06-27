@@ -217,22 +217,37 @@ public class Base64Decoder {
 			}	
 		}
 		
-		int numberOfGroupsOf8 = totalBinaryValues.size() / 8;	//not sure if I need this line
+		System.out.println(totalBinaryValues);
+		
+		int numberOfGroupsOf8 = totalBinaryValues.size() / 8;
 		
 		//converts array list into an array
 		int[] BinaryValues = new int[totalBinaryValues.size()];
 		for(int i = 0; i < totalBinaryValues.size(); i++) {
 			BinaryValues[i] = totalBinaryValues.get(i);
 		}
+				
+		//take array and work in groups of 8 to turn binary back into numbers. Put numbers in a byte array
+		int[] NumericalValues = new int[BinaryValues.length];
+		int replaceValues = 1;
+		byte[] decoded = new byte[numberOfGroupsOf8];
+		for(int i = 0; i < numberOfGroupsOf8; i++) {
+			decoded[i] = 0;
+			replaceValues = 1;
+			for(int setOf8 = 7+(8*i); setOf8 > -1+(8*i); setOf8--) {
+				NumericalValues[setOf8] = replaceValues;
+				replaceValues = 2*replaceValues;
+				if(BinaryValues[setOf8] == 1) {
+					decoded[i] = (byte) (decoded[i] + NumericalValues[setOf8]);
+				}
+			}
+		}
 		
-		//STILL WORKING HERE
-		
-		//next steps: take array and work in groups of 8 to turn binary back into letters. Put letters in a byte array
-		
-		
+		for(int i = 0; i < decoded.length; i++) {
+			System.out.println(decoded[i]);
+		}
 		
 		
-		
-		return null;
+		return decoded;
 	}
 }
